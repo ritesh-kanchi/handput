@@ -20,7 +20,7 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
         from connection: AVCaptureConnection
     ) {
         
-        var fingerTips: [CGPoint] = []
+        var fingerTips: [FingerJointPointCG] = []
         
         defer {
             DispatchQueue.main.sync {
@@ -131,8 +131,10 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
             .map {
                 // 4
-                CGPoint(x: $0.recognizedPoint.location.x, y: 1 - $0.recognizedPoint.location.y)
+                FingerJointPointCG(location:  CGPoint(x: $0.recognizedPoint.location.x, y: 1 - $0.recognizedPoint.location.y), type: $0.type)
+               
             }
+            
             
             
         } catch {
@@ -142,6 +144,7 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
 }
+
 
 
 
@@ -198,6 +201,8 @@ class CameraModel: NSObject, ObservableObject {
             
             let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)
             
+            
+            
             let input = try AVCaptureDeviceInput(device: device!)
             
             if self.session.canAddInput(input) {
@@ -218,12 +223,12 @@ class CameraModel: NSObject, ObservableObject {
         
     }
     
-    var pointsProcessorHandler: (([CGPoint]) -> Void)?
+    var pointsProcessorHandler: (([FingerJointPointCG]) -> Void)?
     
-    func processPoints(_ fingerTips: [CGPoint]) {
+    func processPoints(_ fingerTips: [FingerJointPointCG]) {
         // 2
         let convertedPoints = fingerTips.map {
-            self.preview.layerPointConverted(fromCaptureDevicePoint: $0)
+            FingerJointPointCG(location:  self.preview.layerPointConverted(fromCaptureDevicePoint: $0.location), type: $0.type)
         }
         
         // 3
@@ -240,6 +245,13 @@ struct FingerJointPoint {
     var type: JointType
 }
 
+struct FingerJointPointCG: Identifiable {
+    var id = UUID()
+    var location: CGPoint
+    var type: JointType
+}
+
+
 enum JointType {
     case tip
     case dip
@@ -248,4 +260,5 @@ enum JointType {
     case ip
     case cmc
     case mp
+    case wrist
 }

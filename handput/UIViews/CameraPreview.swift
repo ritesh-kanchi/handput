@@ -13,7 +13,7 @@ struct CameraPreview: UIViewRepresentable {
     
     @ObservedObject var camera: CameraModel
     
-    var pointsProcessorHandler: (([CGPoint]) -> Void)?
+    var pointsProcessorHandler: (([FingerJointPointCG]) -> Void)?
     
     func makeUIView(context: Context) -> UIView {
         
