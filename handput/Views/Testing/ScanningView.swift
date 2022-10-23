@@ -225,8 +225,8 @@ struct CameraOverlay: View {
             ZStack {
                 ForEach(overlayPoints) { point in
                     Circle()
-                        .fill(.white .opacity(point.type == .tip ? 1 : 0.5))
-                        .frame(width: point.type == .tip ? 10 : 5, height: point.type == .tip ? 10 : 5)
+                        .fill(.white)
+                        .frame(width: 5, height: 5)
                         .position(x: point.location.x, y: point.location.y)
                         .tag(point.id)
                     
