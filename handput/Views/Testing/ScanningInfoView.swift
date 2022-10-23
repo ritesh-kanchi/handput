@@ -31,7 +31,7 @@ struct ScanningInfoView: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 250)
             }
-            .padding(.bottom,240)
+            Spacer()
             
             NavigationLink(destination: ScanningView()) {
                 DefaultButton(text: "Get Started")

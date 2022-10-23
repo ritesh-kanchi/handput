@@ -11,14 +11,13 @@
 		A62069F329047935000135C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62069F229047935000135C4 /* ContentView.swift */; };
 		A62069F529047936000135C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A62069F429047936000135C4 /* Assets.xcassets */; };
 		A62069F829047936000135C4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A62069F729047936000135C4 /* Preview Assets.xcassets */; };
-		A6206A02290479F4000135C4 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A01290479F4000135C4 /* HomeView.swift */; };
+		A6206A02290479F4000135C4 /* OldHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A01290479F4000135C4 /* OldHomeView.swift */; };
 		A6206A0429047E5F000135C4 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A0329047E5F000135C4 /* AboutView.swift */; };
 		A6206A0629047E8D000135C4 /* ScanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A0529047E8D000135C4 /* ScanningView.swift */; };
 		A6206A0929047FA6000135C4 /* ScanningInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A0829047FA6000135C4 /* ScanningInfoView.swift */; };
 		A6206A0C29048056000135C4 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A0B29048056000135C4 /* Buttons.swift */; };
 		A6206A0E2904836B000135C4 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A0D2904836B000135C4 /* CameraModel.swift */; };
 		A6206A102904838F000135C4 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6206A0F2904838F000135C4 /* CameraPreview.swift */; };
-		A6206A12290484AD000135C4 /* MyHandPoseClassifier 1.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A6206A11290484AD000135C4 /* MyHandPoseClassifier 1.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,14 +26,13 @@
 		A62069F229047935000135C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A62069F429047936000135C4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A62069F729047936000135C4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A6206A01290479F4000135C4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A6206A01290479F4000135C4 /* OldHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldHomeView.swift; sourceTree = "<group>"; };
 		A6206A0329047E5F000135C4 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		A6206A0529047E8D000135C4 /* ScanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningView.swift; sourceTree = "<group>"; };
 		A6206A0829047FA6000135C4 /* ScanningInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningInfoView.swift; sourceTree = "<group>"; };
 		A6206A0B29048056000135C4 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		A6206A0D2904836B000135C4 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
 		A6206A0F2904838F000135C4 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
-		A6206A11290484AD000135C4 /* MyHandPoseClassifier 1.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "MyHandPoseClassifier 1.mlmodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +68,6 @@
 				A62069F029047935000135C4 /* handputApp.swift */,
 				A62069F229047935000135C4 /* ContentView.swift */,
 				A6206A00290479DF000135C4 /* Logic */,
-				A6206A13290484B1000135C4 /* ML */,
 				A62069FF290479D1000135C4 /* Models */,
 				A62069FE290479CC000135C4 /* Views */,
 				A6206A0A29048047000135C4 /* Components */,
@@ -92,10 +89,7 @@
 		A62069FE290479CC000135C4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A6206A01290479F4000135C4 /* HomeView.swift */,
-				A6206A0329047E5F000135C4 /* AboutView.swift */,
-				A6206A0529047E8D000135C4 /* ScanningView.swift */,
-				A6206A0829047FA6000135C4 /* ScanningInfoView.swift */,
+				A6B81C992904EAF900793791 /* Testing */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -131,12 +125,15 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		A6206A13290484B1000135C4 /* ML */ = {
+		A6B81C992904EAF900793791 /* Testing */ = {
 			isa = PBXGroup;
 			children = (
-				A6206A11290484AD000135C4 /* MyHandPoseClassifier 1.mlmodel */,
+				A6206A01290479F4000135C4 /* OldHomeView.swift */,
+				A6206A0329047E5F000135C4 /* AboutView.swift */,
+				A6206A0529047E8D000135C4 /* ScanningView.swift */,
+				A6206A0829047FA6000135C4 /* ScanningInfoView.swift */,
 			);
-			path = ML;
+			path = Testing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,10 +208,9 @@
 			files = (
 				A6206A0C29048056000135C4 /* Buttons.swift in Sources */,
 				A6206A0629047E8D000135C4 /* ScanningView.swift in Sources */,
-				A6206A12290484AD000135C4 /* MyHandPoseClassifier 1.mlmodel in Sources */,
 				A6206A0429047E5F000135C4 /* AboutView.swift in Sources */,
 				A6206A102904838F000135C4 /* CameraPreview.swift in Sources */,
-				A6206A02290479F4000135C4 /* HomeView.swift in Sources */,
+				A6206A02290479F4000135C4 /* OldHomeView.swift in Sources */,
 				A6206A0929047FA6000135C4 /* ScanningInfoView.swift in Sources */,
 				A62069F329047935000135C4 /* ContentView.swift in Sources */,
 				A6206A0E2904836B000135C4 /* CameraModel.swift in Sources */,

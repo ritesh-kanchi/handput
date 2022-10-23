@@ -50,6 +50,8 @@ func getGesture(_ points: [FingerJointPointCG]) -> GestureType {
     let mps = points.filter({ $0.type == .mp }).count
     let cmcs = points.filter({ $0.type == .cmc }).count
     
+    let wrist = points.filter({ $0.type == .wrist }).count
+    
     let maxTips = 5
     let maxPips = 4
     let maxDips = 4
@@ -58,6 +60,8 @@ func getGesture(_ points: [FingerJointPointCG]) -> GestureType {
     let maxIps = 1
     let maxMps = 1
     let maxCmcs = 1
+    
+    let maxWrist = 1
     
     let fullTips = maxTips == tips
     let fullPips = maxPips == pips
@@ -68,14 +72,24 @@ func getGesture(_ points: [FingerJointPointCG]) -> GestureType {
     let fullMps = maxMps == mps
     let fullCmcs = maxCmcs == cmcs
     
+    let fullWrist = wrist == maxWrist
     
     if tips >= 4 && fullDips && fullPips && fullIps  {
         return .open
     }
     
-    if totalJoints >= 12 && dips >= 3 && tips >= 3 && pips >= 3  {
+    if totalJoints >= 12 && tips >= 2 && dips >= 3 && pips >= 3 {
+        return .two
+    }
+    
+    if totalJoints >= 9 && dips >= 3 && pips >= 3  {
         return .three
     }
+    
+    if totalJoints <= 10 {
+        return .closed
+    }
+    
     return .undefined
 }
 
@@ -135,17 +149,25 @@ struct ScanningView: View {
                     .fontWeight(.semibold)
                     .frame(width: 200)
                     .multilineTextAlignment(.center)
-                HStack(alignment: .center, spacing: 10) {
-                    Text("\(overlayPoints.count) joints detected".uppercased())
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .padding(.horizontal, 20)
-                        .padding(.vertical,10)
-                        .background(.primary.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .onTapGesture {
-                            print(overlayPoints)
-                        }
-                    Text("\(getGestureIdentification(getGesture(overlayPoints)))".uppercased())
+                VStack(alignment: .center, spacing: 10) {
+                    HStack(alignment: .center, spacing: 10) {
+                        Text("\(overlayPoints.filter{$0.type != .wrist}.count) joints detected".uppercased())
+                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical,10)
+                            .background(.primary.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .onTapGesture {
+                                print(overlayPoints)
+                            }
+                        Text("\(getGestureIdentification(getGesture(overlayPoints)))".uppercased())
+                            .font(.system(size: 12, weight: .medium, design: .default))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical,10)
+                            .background(.primary.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
+                    Text("\(overlayPoints.filter{$0.type == .wrist}.count > 0 ? "" : "no ")wrist detected".uppercased())
                         .font(.system(size: 12, weight: .medium, design: .default))
                         .padding(.horizontal, 20)
                         .padding(.vertical,10)
@@ -200,43 +222,48 @@ struct CameraOverlay: View {
     
     var body: some View {
         ZStack {
-            ForEach(overlayPoints) { point in
-                Circle()
-                    .fill(getJointColor(point))
-                    .frame(width: 5, height: 5)
-                    .position(x: point.location.x, y: point.location.y)
-                    .tag(point.id)
+            ZStack {
+                ForEach(overlayPoints) { point in
+                    Circle()
+                        .fill(.white .opacity(point.type == .tip ? 1 : 0.5))
+                        .frame(width: point.type == .tip ? 10 : 5, height: point.type == .tip ? 10 : 5)
+                        .position(x: point.location.x, y: point.location.y)
+                        .tag(point.id)
+                    
+                }
                 
+                if(overlayPoints.contains{$0.finger == .wrist}) {
+                    Circle()
+                        .fill(.white.opacity(0.5))
+                        .frame(width: 5, height: 5)
+                        .position(x: overlayPoints.filter{$0.finger == .wrist}[0].location.x, y: overlayPoints.filter{$0.finger == .wrist}[0].location.y)
+                }
             }
-            
-            if(overlayPoints.contains{$0.finger == .wrist}) {
-                Circle()
-                    .fill(.purple)
-                    .frame(width: 5, height: 5)
-                    .position(x: overlayPoints.filter{$0.finger == .wrist}[0].location.x, y: overlayPoints.filter{$0.finger == .wrist}[0].location.y)
-            }
-            
-      
-            if(!overlayPoints.isEmpty) {
-                
-                ForEach(FingerType.allCases.filter { $0.rawValue != "wrist"}, id:\.self) { type in
-                    Path { path in
-                        
-                        let points = overlayPoints.filter { $0.finger == type }
-                        
-                        let wristPoint = overlayPoints.filter{$0.finger == .wrist}
-                        
-                        if(!points.isEmpty) {
-                            path.move(to: wristPoint.isEmpty  ?  points[0].location : wristPoint[0].location)
+            ZStack {
+                if(!overlayPoints.isEmpty) {
+                    
+                    ForEach(FingerType.allCases.filter { $0.rawValue != "wrist"}, id:\.self) { type in
+                        Path { path in
                             
-                            for point in points.reversed() {
-                                path.addLine(to: point.location)
+                            let points = overlayPoints.filter { $0.finger == type }
+                            
+                            let wristPoint = overlayPoints.filter{$0.finger == .wrist}
+                            
+                            if(!points.isEmpty) {
+                                path.move(to: wristPoint.isEmpty  ?  points[0].location : wristPoint[0].location)
+                                
+                                for point in points.reversed() {
+                                    path.addLine(to: point.location)
+                                }
+                                
+                                
                             }
                             
-                          
                         }
+                       
+                        .stroke(LinearGradient(gradient: Gradient(colors: [Color.white.opacity(0.5), Color.white.opacity(0.25)]), startPoint: .leading, endPoint: .trailing), style: StrokeStyle(lineWidth: 2, dash: [5]))
                         
-                    }.stroke(Color.red)
+                    }
                 }
                 
             }
