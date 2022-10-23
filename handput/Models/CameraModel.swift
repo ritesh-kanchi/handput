@@ -57,68 +57,68 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
                 
                 
                 if let thumbTIP = points[.thumbTip] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbTIP, type: .tip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbTIP, type: .tip, finger: .thumb))
                 }
                 if let thumbIP = points[.thumbIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbIP, type: .ip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbIP, type: .ip, finger: .thumb))
                 }
                 if let thumbMP = points[.thumbMP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbMP, type: .mp))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbMP, type: .mp, finger: .thumb))
                 }
                 if let thumbCMC = points[.thumbCMC] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbCMC, type: .cmc))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: thumbCMC, type: .cmc, finger: .thumb))
                 }
                 
                 if let indexTIP = points[.indexTip] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexTIP, type: .tip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexTIP, type: .tip, finger: .index))
                 }
                 if let indexDIP = points[.indexDIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexDIP, type: .dip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexDIP, type: .dip, finger: .index))
                 }
                 if let indexPIP = points[.indexPIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexPIP, type: .pip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexPIP, type: .pip, finger: .index))
                 }
                 if let indexMCP = points[.indexMCP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexMCP, type: .mcp))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: indexMCP, type: .mcp, finger: .index))
                 }
                 
                 if let middleTIP = points[.middleTip] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middleTIP, type: .tip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middleTIP, type: .tip, finger: .middle))
                 }
                 if let middleDIP = points[.middleDIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middleDIP, type: .dip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middleDIP, type: .dip, finger: .middle))
                 }
                 if let middlePIP = points[.middlePIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middlePIP, type: .pip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middlePIP, type: .pip, finger: .middle))
                 }
                 if let middleMCP = points[.middleMCP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middleMCP, type: .mcp))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: middleMCP, type: .mcp, finger: .middle))
                 }
                 
                 if let ringTIP = points[.ringTip] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringTIP, type: .tip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringTIP, type: .tip, finger: .ring))
                 }
                 if let ringDIP = points[.ringDIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringDIP, type: .dip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringDIP, type: .dip, finger: .ring))
                 }
                 if let ringPIP = points[.ringPIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringPIP, type: .pip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringPIP, type: .pip, finger: .ring))
                 }
                 if let ringMCP = points[.ringMCP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringMCP, type: .mcp))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: ringMCP, type: .mcp, finger: .ring))
                 }
                 
                 if let littleTIP = points[.littleTip] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littleTIP, type: .tip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littleTIP, type: .tip, finger: .little))
                 }
                 if let littleDIP = points[.littleDIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littleDIP, type: .dip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littleDIP, type: .dip, finger: .little))
                 }
                 if let littlePIP = points[.littlePIP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littlePIP, type: .pip))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littlePIP, type: .pip, finger: .little))
                 }
                 if let littleMCP = points[.littleMCP] {
-                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littleMCP, type: .mcp))
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: littleMCP, type: .mcp, finger: .little))
                 }
                 
                 
@@ -131,7 +131,7 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
             .map {
                 // 4
-                FingerJointPointCG(location:  CGPoint(x: $0.recognizedPoint.location.x, y: 1 - $0.recognizedPoint.location.y), type: $0.type)
+                FingerJointPointCG(location:  CGPoint(x: $0.recognizedPoint.location.x, y: 1 - $0.recognizedPoint.location.y), type: $0.type, finger: $0.finger)
                
             }
             
@@ -168,7 +168,7 @@ class CameraModel: NSObject, ObservableObject {
         let request = VNDetectHumanHandPoseRequest()
         
         // 2
-        request.maximumHandCount = 2
+        request.maximumHandCount = 1
         return request
     }()
     
@@ -228,7 +228,7 @@ class CameraModel: NSObject, ObservableObject {
     func processPoints(_ fingerTips: [FingerJointPointCG]) {
         // 2
         let convertedPoints = fingerTips.map {
-            FingerJointPointCG(location:  self.preview.layerPointConverted(fromCaptureDevicePoint: $0.location), type: $0.type)
+            FingerJointPointCG(location:  self.preview.layerPointConverted(fromCaptureDevicePoint: $0.location), type: $0.type, finger: $0.finger)
         }
         
         // 3
@@ -243,12 +243,14 @@ class CameraModel: NSObject, ObservableObject {
 struct FingerJointPoint {
     var recognizedPoint: VNRecognizedPoint
     var type: JointType
+    var finger: FingerType
 }
 
 struct FingerJointPointCG: Identifiable {
     var id = UUID()
     var location: CGPoint
     var type: JointType
+    var finger: FingerType
 }
 
 
@@ -261,4 +263,12 @@ enum JointType {
     case cmc
     case mp
     case wrist
+}
+
+enum FingerType: String, CaseIterable {
+    case thumb
+    case index
+    case middle
+    case ring
+    case little
 }

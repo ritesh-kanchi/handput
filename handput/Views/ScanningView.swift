@@ -39,6 +39,8 @@ enum GestureType {
 
 func getGesture(_ points: [FingerJointPointCG]) -> GestureType {
     
+    let totalJoints = points.count
+    
     let tips = points.filter({ $0.type == .tip }).count
     let pips = points.filter({ $0.type == .pip }).count
     let dips = points.filter({ $0.type == .dip }).count
@@ -67,11 +69,14 @@ func getGesture(_ points: [FingerJointPointCG]) -> GestureType {
     let fullCmcs = maxCmcs == cmcs
     
     
-    if(fullTips && fullDips && fullPips && fullIps) {
+    if tips >= 4 && fullDips && fullPips && fullIps  {
         return .open
-    } else {
-        return .undefined
     }
+    
+    if totalJoints >= 12 && dips >= 3 && tips >= 3 && pips >= 3  {
+        return .three
+    }
+    return .undefined
 }
 
 func getGestureIdentification(_ gesture: GestureType) -> String {
@@ -108,27 +113,9 @@ struct ScanningView: View {
                 .overlay {
                     //                                  FingersOverlay(with: overlayPoints)
                     //                                    .foregroundColor(.orange)
-                    ZStack {
-                        ForEach(overlayPoints) { point in
-                            Circle()
-                                .fill(getJointColor(point))
-                                .frame(width: 5, height: 5)
-                                .position(x: point.location.x, y: point.location.y)
-                                .tag(point.id)
-                            
-                        }
-                        
-                        Path() { path in
-                            if(!overlayPoints.isEmpty) {
-                                path.move(to: overlayPoints[0].location)
-                                for point in overlayPoints {
-                                    path.addLine(to: point.location)
-                                }
-                            }
-                        }
-                        .stroke(Color.green)
-                    }
+                    CameraOverlay(overlayPoints: overlayPoints)
                 }
+
                 
                 
                 //                Rectangle()
@@ -139,6 +126,7 @@ struct ScanningView: View {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .strokeBorder(.black.opacity(0.25), style: StrokeStyle(lineWidth: 10))
                 }
+                .fixedSize()
             }
             .frame(width: 380, height: 380)
             .overlay{
@@ -210,5 +198,45 @@ struct FingersOverlay: Shape {
         }
         
         return Path(pointsPath.cgPath)
+    }
+}
+
+struct CameraOverlay: View {
+    
+    var overlayPoints: [FingerJointPointCG]
+    
+    var body: some View {
+        ZStack {
+            ForEach(overlayPoints) { point in
+                Circle()
+                    .fill(getJointColor(point))
+                    .frame(width: 5, height: 5)
+                    .position(x: point.location.x, y: point.location.y)
+                    .tag(point.id)
+                
+            }
+            
+            
+            if(!overlayPoints.isEmpty) {
+                
+                ForEach(FingerType.allCases, id:\.self) { type in
+                    Path { path in
+                        
+                        let points = overlayPoints.filter { $0.finger == type }
+                        
+                        if(!points.isEmpty) {
+                            path.move(to: points[0].location)
+                            
+                            for point in points {
+                                path.addLine(to: point.location)
+                            }
+                        }
+                        
+                    }.stroke(Color.red)
+                }
+                
+            }
+            
+        }
     }
 }
