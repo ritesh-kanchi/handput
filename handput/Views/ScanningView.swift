@@ -111,15 +111,8 @@ struct ScanningView: View {
                     overlayPoints = $0
                 }
                 .overlay {
-                    //                                  FingersOverlay(with: overlayPoints)
-                    //                                    .foregroundColor(.orange)
                     CameraOverlay(overlayPoints: overlayPoints)
                 }
-
-                
-                
-                //                Rectangle()
-                //                    .fill(.blue)
                 .frame(width: 360, height: 360)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .overlay{
@@ -216,20 +209,31 @@ struct CameraOverlay: View {
                 
             }
             
+            if(overlayPoints.contains{$0.finger == .wrist}) {
+                Circle()
+                    .fill(.purple)
+                    .frame(width: 5, height: 5)
+                    .position(x: overlayPoints.filter{$0.finger == .wrist}[0].location.x, y: overlayPoints.filter{$0.finger == .wrist}[0].location.y)
+            }
             
+      
             if(!overlayPoints.isEmpty) {
                 
-                ForEach(FingerType.allCases, id:\.self) { type in
+                ForEach(FingerType.allCases.filter { $0.rawValue != "wrist"}, id:\.self) { type in
                     Path { path in
                         
                         let points = overlayPoints.filter { $0.finger == type }
                         
+                        let wristPoint = overlayPoints.filter{$0.finger == .wrist}
+                        
                         if(!points.isEmpty) {
-                            path.move(to: points[0].location)
+                            path.move(to: wristPoint.isEmpty  ?  points[0].location : wristPoint[0].location)
                             
-                            for point in points {
+                            for point in points.reversed() {
                                 path.addLine(to: point.location)
                             }
+                            
+                          
                         }
                         
                     }.stroke(Color.red)
@@ -240,3 +244,4 @@ struct CameraOverlay: View {
         }
     }
 }
+

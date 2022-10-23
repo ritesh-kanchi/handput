@@ -121,6 +121,10 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
                     recognizedPoints.append(FingerJointPoint(recognizedPoint: littleMCP, type: .mcp, finger: .little))
                 }
                 
+                if let wristPoint = points[.wrist] {
+                    recognizedPoints.append(FingerJointPoint(recognizedPoint: wristPoint, type: .wrist, finger: .wrist))
+                }
+                
                 
             }
             
@@ -271,4 +275,5 @@ enum FingerType: String, CaseIterable {
     case middle
     case ring
     case little
+    case wrist
 }
