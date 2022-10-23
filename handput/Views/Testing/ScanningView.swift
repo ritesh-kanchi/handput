@@ -74,19 +74,16 @@ func getGesture(_ points: [FingerJointPointCG]) -> GestureType {
     
     let fullWrist = wrist == maxWrist
     
-    if tips >= 4 && fullDips && fullPips && fullIps  {
+    if tips >= 5 && fullDips && fullPips && fullIps  {
         return .open
     }
     
-    if totalJoints >= 12 && tips >= 2 && dips >= 3 && pips >= 3 {
+    
+    if totalJoints <= 20 && totalJoints >= 11 && tips >= 1 && tips < 5 {
         return .two
     }
     
-    if totalJoints >= 9 && dips >= 3 && pips >= 3  {
-        return .three
-    }
-    
-    if totalJoints <= 10 {
+    if totalJoints <= 9 && totalJoints >= 3 {
         return .closed
     }
     
@@ -195,24 +192,6 @@ struct ScanningView: View {
 struct ScanningView_Previews: PreviewProvider {
     static var previews: some View {
         ScanningView()
-    }
-}
-
-struct FingersOverlay: Shape {
-    let points: [FingerJointPointCG]
-    private let pointsPath = UIBezierPath()
-    
-    init(with points: [FingerJointPointCG]) {
-        self.points = points
-    }
-    
-    func path(in rect: CGRect) -> Path {
-        for point in points {
-            pointsPath.move(to: point.location)
-            pointsPath.addArc(withCenter: point.location, radius: 5, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
-        }
-        
-        return Path(pointsPath.cgPath)
     }
 }
 

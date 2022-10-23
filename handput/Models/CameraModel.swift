@@ -131,7 +131,7 @@ CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
             // 3
             fingerTips = recognizedPoints.filter {
                 // Ignore low confidence points.
-                $0.recognizedPoint.confidence > 0.80
+                $0.recognizedPoint.confidence > 0.9
             }
             .map {
                 // 4
