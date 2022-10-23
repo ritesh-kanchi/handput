@@ -238,7 +238,7 @@ func determineDistanceFromScreen(points: [FingerJointPointCG]) -> HandDistances 
         
         let distance = getCGDistance(point1: point1, point2: point2)
         
-        if points.count >= 20 {
+        if points.count >= 20 && distance < 280 && distance > 100 {
            return .ideal
        } else if distance > 280 || (points.count < 17 && distance < 200) {
             return .near
