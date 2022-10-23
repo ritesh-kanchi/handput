@@ -164,14 +164,22 @@ struct ScanningView: View {
                             .background(.primary.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     }
-                    Text("\(overlayPoints.filter{$0.type == .wrist}.count > 0 ? "" : "no ")wrist detected".uppercased())
-                        .font(.system(size: 12, weight: .medium, design: .default))
-                        .padding(.horizontal, 20)
-                        .padding(.vertical,10)
-                        .background(.primary.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    HStack(alignment: .center, spacing: 10) {
+                        Text("\(overlayPoints.filter{$0.type == .wrist}.count > 0 ? "" : "no ")wrist detected".uppercased())
+                            .font(.system(size: 12, weight: .medium, design: .default))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical,10)
+                            .background(.primary.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        
+                        Text(getDistanceResponse(determineDistanceFromScreen(points: overlayPoints)).uppercased())
+                            .font(.system(size: 12, weight: .medium, design: .default))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical,10)
+                            .background(.primary.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
                 }
-                
             }
             Spacer()
             
@@ -187,6 +195,60 @@ struct ScanningView: View {
             visible.toggle()
         }
     }
+}
+
+enum HandDistances {
+    case near
+    case ideal
+    case far
+    case undefined
+}
+
+func getDistanceResponse(_ handDist: HandDistances) -> String {
+    switch handDist {
+    case .near:
+        return "too close"
+    case .ideal:
+        return "ideal distance"
+    case .far:
+        return "too far"
+    default:
+        return "undefined"
+    }
+}
+
+func getCGDistance(point1: CGPoint, point2: CGPoint) -> Double {
+    
+    let distance = sqrt(pow((point1.x - point2.x), 2)+pow((point1.y - point2.y), 2))
+    
+    print(distance)
+    
+    return distance
+    
+}
+
+
+
+func determineDistanceFromScreen(points: [FingerJointPointCG]) -> HandDistances {
+    
+    if !points.isEmpty && points.count > 2 {
+        let point1 = points.contains {$0.finger == .wrist} ? points.filter {$0.finger == .wrist}[0].location : points[0].location
+        
+        let point2 = points.contains {$0.finger == .index && $0.type == .tip} ? points.filter {$0.finger == .index && $0.type == .tip}[0].location : points[1].location
+        
+        let distance = getCGDistance(point1: point1, point2: point2)
+        
+        if points.count >= 20 {
+           return .ideal
+       } else if distance > 280 || (points.count < 17 && distance < 200) {
+            return .near
+        } else if distance < 100 {
+            return .far
+        }
+    }
+    
+    return .undefined
+    
 }
 
 struct ScanningView_Previews: PreviewProvider {
